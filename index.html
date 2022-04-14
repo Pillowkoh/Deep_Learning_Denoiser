@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Audio Denoiser</title>
+    <link rel="stylesheet" href="src/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="src/index.js"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        <h3>50.039 Theory and Practice of Deep Learning</h3>
+        <h1>Audio Denoiser</h1>
+        <p>by Koh Jun Hao, Arnold Lim, & Claudia Chin</p>
+    </div>
+
+    <div class="input-area">
+        <h3>Step 1: Upload Noisy Audio Input</h3>
+        <label for="audio-input">Choose an audio file to denoise:</label>
+        <input type="file" id="audio-input" name="audio-input" accept=".mp3, .wav">
+        <br>
+        <audio controls id="input-display">
+            <source id="input" src="" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <div class="denoise-button-area">
+        <h3>Step 2: Denoise!</h3>
+        <input type="image" src="src/denoise-icon.jpeg" id="denoise" name="denoise"/>
+    </div>
+
+    <div class="output-area">
+        <h3>Step 3: Download Cleaned / Denoised Audio Output</h3>
+        <audio controls id="output-display">
+            <source id="output" src="" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+</body>
+
+</html>

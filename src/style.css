@@ -1,0 +1,22 @@
+body {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+
+.header, .input-area, .output-area, .denoise-button-area {
+    padding: 20px 40px;
+}
+
+#denoise {
+    width: 120px;
+    border-radius: 80px;
+    box-shadow: 0 0 8px black;
+}
+#denoise:hover {
+    transform: scale(1.05);
+}
+
+.header {
+    background-color: #2B2D42;
+    color: white;
+}
