@@ -1,6 +1,7 @@
-import random
+from flask import Flask, render_template
 
-def main():
-    return random.randint(0,9)
+app = Flask(__name__)
 
-main()
+@app.route("/")
+def denoise():
+    return "<p>Hello, World!</p>"
