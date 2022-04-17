@@ -2,3 +2,5 @@
 .DS_Store
 data/clean_audio/
 data/noisy_audio/
+data/clean_audio_WAV/*.wav
+data/noisy_audio_WAV/*.wav
