@@ -1,3 +1,4 @@
+import tqdm
 import torch
 from os import listdir
 from os.path import isfile, join
@@ -9,7 +10,7 @@ path_output = './data/clean_audio_tensors'
 # path_output = './data/noisy_audio_tensors'
 
 file_data = [f for f in listdir(path_input) if isfile (join(path_input, f))]
-for line in file_data:
+for line in tqdm(file_data):
     if ( line[-1:] == '\n' ):
         line = line[:-1]
 
