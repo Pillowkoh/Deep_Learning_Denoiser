@@ -68,13 +68,13 @@ class Trainer(object):
 
         for i, data in enumerate(dataloader, 0):
             inputs = data["noisy"].to(self.device)
-            labels = data["clean"].to(self.device)
+            clean = data["clean"].to(self.device)
 
             self.optimizer.zero_grad()
             running_loss = []
 
-            outputs = self.model(inputs)
-            loss = self.loss_fn(outputs, labels)
+            denoised = self.model(inputs)
+            loss = self.loss_fn(clean, denoised)
             loss.backward()
             self.optimizer.step()
 
@@ -92,10 +92,10 @@ class Trainer(object):
         with torch.no_grad():
             for i, data in enumerate(dataloader, 0):
                 inputs = data["noisy"].to(self.device)
-                labels = data["clean"].to(self.device)
+                clean = data["clean"].to(self.device)
 
-                outputs = self.model(inputs)
-                loss = self.loss_fn(outputs, labels)
+                denoised = self.model(inputs)
+                loss = self.loss_fn(clean, denoised)
 
                 running_loss.append(loss.item())
 
