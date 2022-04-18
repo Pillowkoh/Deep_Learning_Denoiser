@@ -8,8 +8,8 @@ class Audio_Dataset(Dataset):
     def __init__(self, config, set_type="train"):
         super(Audio_Dataset, self).__init__() 
         self.device = config["device"]
-        self.clean_dir = os.path.join(config["clean_dir"], "clean_audio_tensor")
-        self.noisy_dir = os.path.join(config["noisy_dir"], "noisy_audio_tensor")
+        self.clean_dir = os.path.join(config["data_dir"], "clean_audio_tensors")
+        self.noisy_dir = os.path.join(config["data_dir"], "noisy_audio_tensors")
 
         self.clean_names = np.sort(os.listdir(self.clean_dir))
         self.noisy_names = np.sort(os.listdir(self.noisy_dir))
@@ -45,4 +45,3 @@ class Audio_Dataset(Dataset):
             "noisy":audio_input,
             "clean":ground_truth,
         }
-

@@ -9,8 +9,8 @@ class Denoiser(torch.nn.Module):
   # S: stride
   def __init__(
   self, 
-  n_layers, 
-  output_channels, 
+  # n_layers, 
+  # output_channels, 
   chin=1,
   chout=1,
   hidden=48,
@@ -29,14 +29,14 @@ class Denoiser(torch.nn.Module):
   sample_rate=22_050
   ):
     super(Denoiser, self).__init__()
-    self.D = n_layers
-    self.H = output_channels
-    self.K = kernel_size
-    self.S = kernel_size // 2
+    # self.D = n_layers
+    # self.H = output_channels
+    # self.K = kernel_size
+    # self.S = kernel_size // 2
 
     self.encoder = nn.ModuleList([])
-    self.decoder = nn.ModuleList([])
     self.attention = nn.ModuleList([])
+    self.decoder = nn.ModuleList([])
     activation = nn.GLU(1) if glu else nn.ReLU()
     ch_scale = 2 if glu else 1
 
