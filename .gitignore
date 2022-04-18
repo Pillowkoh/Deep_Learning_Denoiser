@@ -1,6 +1,12 @@
 
+# General .gitignore files
 .DS_Store
+__pycache__
+
+# Ignore data files
 data/clean_audio/
 data/noisy_audio/
 data/clean_audio_WAV/*.wav
 data/noisy_audio_WAV/*.wav
+data/clean_audio_tensors/*.pt
+data/noisy_audio_tensors/*.pt
