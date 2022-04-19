@@ -67,6 +67,7 @@ class Trainer(object):
         running_loss = []
 
         for i, data in enumerate(dataloader, 0):
+            print(i,data)
             inputs = data["noisy"].to(self.device)
             clean = data["clean"].to(self.device)
 

@@ -38,8 +38,11 @@ class Audio_Dataset(Dataset):
         clean_name = self.clean_names[idx]
         noisy_name = self.noisy_names[idx]
 
-        audio_input = torch.load(noisy_name, map_location=self.device)
-        ground_truth = torch.load(clean_name, map_location=self.device)
+        clean_tensor_file = os.path.join(self.clean_dir, clean_name)
+        noisy_tensor_file = os.path.join(self.noisy_dir, noisy_name)
+
+        audio_input = torch.load(noisy_tensor_file, map_location=self.device)
+        ground_truth = torch.load(clean_tensor_file, map_location=self.device)
 
         return {
             "noisy":audio_input,
