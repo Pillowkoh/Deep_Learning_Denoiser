@@ -10,7 +10,7 @@ class Trainer(object):
         self.optimizer = optimizer
         self.epochs = epochs
         self.scheduler = scheduler
-        self.checkpoint_frequency = 100
+        self.checkpoint_frequency = 10
         self.early_stopping_epochs = 10
         self.early_stopping_avg = 10
         self.early_stopping_precision = 5
@@ -97,6 +97,7 @@ class Trainer(object):
             # avg_loss = torch.autograd.Variable(avg_loss, requires_grad = True)
 
             # avg_loss.backward()                            
+            loss/=self.batch_size
             loss.backward()                            
             self.optimizer.step()
 
@@ -106,7 +107,7 @@ class Trainer(object):
             if i == self.batches_per_epoch:
                 epoch_loss = np.mean(running_loss)
                 self.loss["train"].append(epoch_loss)
-                break
+                # break
         print('Training epoch complete')
 
     def _epoch_eval(self, dataloader):
@@ -129,10 +130,11 @@ class Trainer(object):
                     # batch_loss.append(loss.item())
                     # batch_loss.append(loss)
                 # running_loss.append(torch.mean(batch_loss))
+                loss/=self.batch_size
                 running_loss.append(loss.item())
 
                 if i == self.batches_per_epoch_val:
                     epoch_loss = np.mean(running_loss)
                     self.loss["val"].append(epoch_loss)
-                    break
+                    # break
         print('Eval epoch complete')
