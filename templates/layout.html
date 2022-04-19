@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Audio Denoiser</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="module" src="{{ url_for('static', filename='index.js') }}"></script>
+</head>
+
+<body>
+    <div class="header">
+        <h3>50.039 Theory and Practice of Deep Learning</h3>
+        <h1>Audio Denoiser</h1>
+        <p>by Koh Jun Hao, Arnold Lim, & Claudia Chin</p>
+    </div>
+
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+
+</html>
