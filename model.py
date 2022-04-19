@@ -1,5 +1,7 @@
+import math
 import torch
 from torch import nn
+from torch.nn import functional as F
 
 
 class Denoiser(torch.nn.Module):
@@ -14,8 +16,8 @@ class Denoiser(torch.nn.Module):
   chin=1,
   chout=1,
   hidden=48,
-  depth=5,
-  N_attention = 3,
+  depth=3,
+  N_attention = 1,
   kernel_size=8,
   stride=4,
   causal=True,
@@ -29,11 +31,9 @@ class Denoiser(torch.nn.Module):
   sample_rate=22_050
   ):
     super(Denoiser, self).__init__()
-    # self.D = n_layers
-    # self.H = output_channels
-    # self.K = kernel_size
-    # self.S = kernel_size // 2
-
+    self.depth = depth
+    self.kernel_size = kernel_size
+    self.stride = stride
     self.encoder = nn.ModuleList([])
     self.attention = nn.ModuleList([])
     self.decoder = nn.ModuleList([])
@@ -74,21 +74,47 @@ class Denoiser(torch.nn.Module):
       self.attention.append(nn.Sequential(*attention))
 
   def forward(self, input):
-    length = input.shape[-1]
+    x = input
+    length = x.shape[-1]
+    x = F.pad(x, (0, self.valid_length(length) - length))
+
     skip_outputs = []
     for encoder in self.encoder:
       x = encoder(x)
       skip_outputs.append(x)
 
-    # x = x.permute(2, 0, 1)
+    x = x.permute(2, 0, 1)
     # x, _ = self.attention(x)
-    # x = x.permute(1, 2, 0)
+
     for attention in self.attention:
-      x, _ = attention(x, x, x)
+      x, _ = attention[0](x, x, x)
+      x = attention[1](x)
+      x = attention[2](x)
     
+    x = x.permute(1, 2, 0)
+
     for decode in self.decoder:
         skip = skip_outputs.pop(-1)
         x = x + skip[..., :x.shape[-1]]
         x = decode(x)
 
+    x = x[..., :length]
     return x
+
+  def valid_length(self, length):
+      """
+      Return the nearest valid length to use with the model so that
+      there is no time steps left over in a convolutions, e.g. for all
+      layers, size of the input - kernel_size % stride = 0.
+      If the mixture has a valid length, the estimated sources
+      will have exactly the same length.
+      """
+      # length = math.ceil(length * self.resample)
+
+      for idx in range(self.depth):
+          length = math.ceil((length - self.kernel_size) / self.stride) + 1
+          length = max(length, 1)
+      for idx in range(self.depth):
+          length = (length - 1) * self.stride + self.kernel_size
+      # length = int(math.ceil(length / self.resample))
+      return int(length)

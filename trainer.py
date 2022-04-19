@@ -1,8 +1,9 @@
 import torch
 import numpy as np
+from tqdm import tqdm
 
 class Trainer(object):
-    def __init__(self, model, loss_fn, optimizer, epochs, scheduler = None):
+    def __init__(self, model, loss_fn, optimizer, epochs, config, scheduler = None):
         self.model = model
         self.loss = {"train":[], "val":[]}
         self.loss_fn = loss_fn
@@ -13,6 +14,10 @@ class Trainer(object):
         self.early_stopping_epochs = 10
         self.early_stopping_avg = 10
         self.early_stopping_precision = 5
+        self.device = config["device"]
+        self.batch_size = config["batch_size"]
+        self.batches_per_epoch = config["batches_per_epoch"]
+        self.batches_per_epoch_val = config["batches_per_epoch_val"]
 
     def train(self, train_dataloader, val_dataloader):
         for epoch in range(self.epochs):
@@ -66,41 +71,68 @@ class Trainer(object):
         self.model.train()
         running_loss = []
 
-        for i, data in enumerate(dataloader, 0):
-            print(i,data)
+        for i, data in enumerate(tqdm(dataloader), 0):
+            # print(f"batch #{i} --- training")
             inputs = data["noisy"].to(self.device)
             clean = data["clean"].to(self.device)
 
             self.optimizer.zero_grad()
             running_loss = []
-
             denoised = self.model(inputs)
-            loss = self.loss_fn(clean, denoised)
-            loss.backward()
+
+            batch_loss = []
+
+            loss = None
+
+            for j in range(self.batch_size):
+                if loss == None:
+                    loss = self.loss_fn(clean[j], denoised[j])
+                else:
+                    loss += self.loss_fn(clean[j], denoised[j])
+                # batch_loss.append(loss.item())
+                # batch_loss.append(loss)
+                # print(loss)
+
+            # avg_loss = torch.mean(torch.FloatTensor(batch_loss))
+            # avg_loss = torch.autograd.Variable(avg_loss, requires_grad = True)
+
+            # avg_loss.backward()                            
+            loss.backward()                            
             self.optimizer.step()
 
+            # running_loss.append(avg_loss)
             running_loss.append(loss.item())
 
             if i == self.batches_per_epoch:
                 epoch_loss = np.mean(running_loss)
                 self.loss["train"].append(epoch_loss)
                 break
+        print('Training epoch complete')
 
     def _epoch_eval(self, dataloader):
         self.model.eval()
         running_loss = []
 
         with torch.no_grad():
-            for i, data in enumerate(dataloader, 0):
+            for i, data in enumerate(tqdm(dataloader), 0):
                 inputs = data["noisy"].to(self.device)
                 clean = data["clean"].to(self.device)
 
                 denoised = self.model(inputs)
-                loss = self.loss_fn(clean, denoised)
-
+                batch_loss = []
+                loss = None
+                for j in range(self.batch_size):
+                    if loss == None:
+                        loss = self.loss_fn(clean[j], denoised[j])
+                    else:
+                        loss += self.loss_fn(clean[j], denoised[j])
+                    # batch_loss.append(loss.item())
+                    # batch_loss.append(loss)
+                # running_loss.append(torch.mean(batch_loss))
                 running_loss.append(loss.item())
 
                 if i == self.batches_per_epoch_val:
                     epoch_loss = np.mean(running_loss)
                     self.loss["val"].append(epoch_loss)
                     break
+        print('Eval epoch complete')

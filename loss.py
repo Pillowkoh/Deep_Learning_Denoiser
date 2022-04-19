@@ -35,14 +35,14 @@ class MutltiResolutionSTFTLoss(torch.nn.Module):
         
 
     def forward(self, clean, denoised):
-        total_sc_loss, total_mag_loss = 0
+        total_sc_loss, total_mag_loss = 0,0
         for stft_loss in self.stft_losses:
             sc_loss, mag_loss = stft_loss(clean, denoised)
             total_sc_loss += sc_loss
             total_mag_loss += mag_loss
         
         avg_sc_loss = self.sc_factor * total_sc_loss / len(self.stft_losses)
-        avg_mag_loss = self.mag_factor * total_mag_loss / len(self.mag_factor)
+        avg_mag_loss = self.mag_factor * total_mag_loss / len(self.stft_losses)
 
         return avg_sc_loss, avg_mag_loss
 
@@ -64,8 +64,11 @@ class STFTLoss(torch.nn.Module):
 
         return sc_loss, mag_loss
 
-    def _stft(self, x, window="hann_window"):
-        x_stft = torch.stft(x, self.fft_size, self.hop_size, self.win_length, window)
+    # def _stft(self, x, window="hann_window"):
+    def _stft(self, x):
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        window = torch.hann_window(self.win_length).to(device)
+        x_stft = torch.stft(x, self.fft_size, self.hop_size, self.win_length, window, return_complex=False)
         real = x_stft[..., 0]
         imag = x_stft[..., 1]
 
@@ -78,4 +81,4 @@ class STFTLoss(torch.nn.Module):
         return num / denom
     
     def _magnitude_loss(self, stft_clean, stft_denoised):
-        return F.l1_loss(torch.log(stft_clean / stft_denoised))
+        return F.l1_loss(torch.log(stft_clean), torch.log(stft_denoised))

@@ -3,6 +3,7 @@
 __pycache__
 
 # Ignore data files
+data
 data/clean_audio/
 data/noisy_audio/
 data/clean_audio_WAV/*.wav
