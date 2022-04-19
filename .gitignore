@@ -11,3 +11,4 @@ data/noisy_audio_WAV/*.wav
 data/clean_audio_tensors/*.pt
 data/noisy_audio_tensors/*.pt
 data/silent_audio
+.venv
