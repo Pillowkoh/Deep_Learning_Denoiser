@@ -12,6 +12,14 @@ elif os.name == 'posix':
     BEST_WEIGHT_PATH = './trained_weights/model_030.pt'
 
 class AudioDenoiser:
+    """
+        Wrapper class for the denoiser model. Processes for a single input audio file and returns a denoised audio file using the denoise() function
+        
+        Args:
+            - filename (str): input filepath of audio file to be denoised
+            - sr (int): sample rate of denoied file
+            - weight_path (str): path of weights to be used for denoiser model
+    """
     def __init__(self, filename, sr=22050, weight_path = BEST_WEIGHT_PATH):
         self.fn = filename
         self.sr = sr

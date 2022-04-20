@@ -4,6 +4,11 @@ import torch.nn.functional as F
 
 
 class DenoiserLoss(torch.nn.Module):
+    """
+        Pytorch module which returns loss between clean and denoised audio waveforms for training the denoiser model
+        Composed of three loss functions: L1 Loss, Spectral convergence loss and Magnitude loss
+        Spectral convergence and magnitude loss are both multi-resolution STFT (short-time Fourier transform) losses implemented in their respective loss function modules
+    """
     def __init__(self):
         super(DenoiserLoss, self).__init__()
 
