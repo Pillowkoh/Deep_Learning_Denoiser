@@ -1,11 +1,18 @@
 import torchaudio
 import torch
-import torch.functional as F
+import torch.nn.functional as F
+import os
 from scipy.io import wavfile
 from model import Denoiser
 
+if os.name == 'nt':
+    BEST_WEIGHT_PATH = '.\\trained_weights\\model_030.pt'
+
+elif os.name == 'posix':
+    BEST_WEIGHT_PATH = './trained_weights/model_030.pt'
+
 class AudioDenoiser:
-    def __init__(self, filename, sr=22050):
+    def __init__(self, filename, sr=22050, weight_path = BEST_WEIGHT_PATH):
         self.fn = filename
         self.sr = sr
 
@@ -14,13 +21,12 @@ class AudioDenoiser:
 
         # TO DO: load model here
         self.model = Denoiser()
+        self.model.load_state_dict(torch.load(weight_path))
     
 
     def denoise(self, out_fp):
-        # TO DO: add model
-        # denoised_waveform = self._denoise_waveform() 
-        # wavfile.write(out_fp, self.sr, denoised_waveform)
-        wavfile.write(out_fp, self.sr, self.waveform)
+        denoised_waveform = self._denoise_waveform() 
+        torchaudio.save(out_fp, denoised_waveform, self.sr)
 
     def _denoise_waveform(self):
         denoised_chunks = []
