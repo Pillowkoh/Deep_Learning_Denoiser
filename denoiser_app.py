@@ -1,6 +1,6 @@
 import torchaudio
 import torch
-import torch.functional as F
+import torch.nn.functional as F
 from scipy.io import wavfile
 from model import Denoiser
 
@@ -20,7 +20,7 @@ class AudioDenoiser:
         # TO DO: add model
         # denoised_waveform = self._denoise_waveform() 
         # wavfile.write(out_fp, self.sr, denoised_waveform)
-        wavfile.write(out_fp, self.sr, self.waveform)
+        torchaudio.save(out_fp, self.waveform, self.sr)
 
     def _denoise_waveform(self):
         denoised_chunks = []
