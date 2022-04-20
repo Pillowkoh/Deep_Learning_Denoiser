@@ -17,13 +17,11 @@ def denoise():
     if request.method == "POST":
         audio_input = request.files["audio-input"]
         if audio_input.filename != '':
-            print("IN UPLOAD:", audio_input)
             audio_input.save(os.path.join(app.config["AUDIO_INPUTS"], audio_input.filename))
 
             in_fp = os.path.join(os.path.join(app.config["AUDIO_INPUTS"], audio_input.filename))
             out_fn = audio_input.filename[:-4] + '_denoised' + '.wav'
             out_fp = os.path.join(os.path.join(app.config["AUDIO_OUTPUTS"], out_fn))
-            print(in_fp, out_fn, out_fp)
             
             denoiser = AudioDenoiser(in_fp)
             denoiser.denoise(out_fp)

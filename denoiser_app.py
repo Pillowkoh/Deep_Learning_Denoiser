@@ -9,7 +9,9 @@ if os.name == 'nt':
     BEST_WEIGHT_PATH = '.\\trained_weights\\model_030.pt'
 
 elif os.name == 'posix':
-    BEST_WEIGHT_PATH = './trained_weights/model_030.pt'
+    BEST_WEIGHT_PATH = 'trained_weights/model_030'
+
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 class AudioDenoiser:
     """
@@ -29,7 +31,7 @@ class AudioDenoiser:
 
         # TO DO: load model here
         self.model = Denoiser()
-        self.model.load_state_dict(torch.load(weight_path))
+        self.model.load_state_dict(torch.load(weight_path, map_location=DEVICE))
     
 
     def denoise(self, out_fp):
@@ -39,20 +41,26 @@ class AudioDenoiser:
     def _denoise_waveform(self):
         denoised_chunks = []
         for chunk in self.chunks:
+            chunk = torch.unsqueeze(chunk, 0)
             denoised_chunk = self.model(chunk)
+            denoised_chunk = torch.squeeze(denoised_chunk, 0)
             denoised_chunks.append(denoised_chunk)
         
         denoised_waveform = torch.cat(denoised_chunks, dim=1)
-        denoised_waveform = denoised_waveform[:-self.padding]
+        denoised_waveform = denoised_waveform[..., :-self.padding]
+        print("DENOISED:", denoised_waveform.shape)
         
         return denoised_waveform
 
     def _get_waveform(self, fn, new_sr):
         waveform, sr = torchaudio.load(fn)
-    
+        print("INPUT SHAPE:", waveform.shape)
+
         if sr != new_sr:
             resampler = torchaudio.transforms.Resample(sr, new_sr)
             resampled_waveform = resampler(waveform)
+        else:
+            return waveform
 
         return resampled_waveform
 
