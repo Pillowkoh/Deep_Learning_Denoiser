@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content">
+
+    <form action="/denoise" method="POST" enctype="multipart/form-data">
+        
+        <div class="content">
+            <h3>Step 1: Upload Noisy Audio Input</h3>
+            <label for="audio-input">Choose an audio file to denoise:</label>
+            <input type="file" id="audio-input" name="audio-input" accept=".mp3, .wav">
+        </div>
+
+        <div class="content">
+            <h3>Step 2: Denoise!</h3>
+            <button type="submit" id="input-confirmation" name="input-confirmation">
+                <img src="{{ url_for('static', filename='denoise-icon.jpeg') }}" height="100" width="100" />
+            </button>
+        </div>
+
+    </form>
+
+    <div class="content">
+        <h3>Step 3: Download Cleaned / Denoised Audio Output</h3>
+        {% if audio_output %}
+        <a href="{{ url_for('download', name=audio_output) }}">Download</a>
+        {% endif %}
+    </div>
+    
+</div>
+{% endblock %}

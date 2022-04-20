@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content">
+    <h3>Start denoising!</h3>
+    <a id="start-btn" href="{{ url_for('denoise') }}">
+        <img src="{{ url_for('static', filename='denoise-icon.jpeg') }}" height ="100" width="100"/>
+    </a>
+</div>
+{% endblock %}
