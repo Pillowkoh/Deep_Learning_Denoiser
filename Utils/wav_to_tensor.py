@@ -3,8 +3,8 @@ import torch
 from os import listdir
 from os.path import isfile, join
 
-path_input = './data/clean_audio_WAV'
-path_output = './data/clean_audio_tensors'
+path_input = '../data/clean_audio_WAV'
+path_output = '../data/clean_audio_tensors'
 
 # path_input = './data/noisy_audio_WAV'
 # path_output = './data/noisy_audio_tensors'

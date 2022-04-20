@@ -5,6 +5,15 @@ from torch.utils.data import Dataset
 
 
 class Audio_Dataset(Dataset):
+    """
+    Class to load audio tensor dataset. 
+    
+    Args: 
+        - config (dict): Dictionary that contains config settings for model 
+        - set_type (Optional[str]): Choose which data to load
+
+    """
+
     def __init__(self, config, set_type="train"):
         super(Audio_Dataset, self).__init__() 
         self.device = config["device"]

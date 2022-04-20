@@ -3,8 +3,8 @@ from pydub import AudioSegment
 from os import listdir
 from os.path import isfile, join
 
-path_input = './data/clean_audio'
-path_output = './data/clean_audio_WAV'
+path_input = '../data/clean_audio'
+path_output = '../data/clean_audio_WAV'
 
 file_data = [f for f in listdir(path_input) if isfile (join(path_input, f))]
 for line in file_data:

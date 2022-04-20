@@ -3,6 +3,18 @@ import numpy as np
 from tqdm import tqdm
 
 class Trainer(object):
+    """
+    Trainer class to coordinate all training processes
+
+    Args:
+        - model (torch.nn.Module): Denoiser model
+        - loss_fn (torch.nn.Module): Module to calculate loss between prediction and ground truth
+        - optimizer (torch.nn.Module): Module to update model weights
+        - epochs (int): Number of training epochs
+        - config (dict): Dictionary containing all training config settings
+        - scheduler (torch.nn.Module): Module to reduce learning rate if no improvement
+    """
+    
     def __init__(self, model, loss_fn, optimizer, epochs, config, scheduler = None):
         self.model = model
         self.loss = {"train":[], "val":[]}
