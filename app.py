@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, send_from_directory, send_file
 from io import StringIO
 import os
+from Deep_Learning_Denoiser.denoiser_app import AudioDenoiser
 
 app = Flask(__name__)
 
@@ -18,12 +19,21 @@ def denoise():
         if audio_input.filename != '':
             print("IN UPLOAD:", audio_input)
             audio_input.save(os.path.join(app.config["AUDIO_INPUTS"], audio_input.filename))
+
             # TO DO: convert input audio to model-required form
             # TO DO: denoise with model
             # TO DO: convert back to web-readable form
             # TO DO: save to AUDIO_OUTPUTS
-            audio_input.save(os.path.join(app.config["AUDIO_OUTPUTS"], audio_input.filename)) # remove
-            return render_template("denoise.html", audio_output=audio_input.filename)
+            in_fp = os.path.join(os.path.join(app.config["AUDIO_INPUTS"], audio_input.filename))
+            out_fn = audio_input.filename(audio_input.filename[:-4] + '_denoised' + 'wav')
+            out_fp = os.path.join(os.path.join(app.config["AUDIO_INPUTS"], out_fn))
+            denoiser = AudioDenoiser(in_fp)
+            denoiser.denoise(out_fp)
+
+            return render_template("denoise.html", audio_output=out_fp)
+
+            # audio_input.save(os.path.join(app.config["AUDIO_OUTPUTS"], audio_input.filename)) # remove
+            # return render_template("denoise.html", audio_output=audio_input.filename)
             
     return render_template("denoise.html")
 
