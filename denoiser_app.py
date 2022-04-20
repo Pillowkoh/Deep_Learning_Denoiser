@@ -33,7 +33,7 @@ class AudioDenoiser:
         
         return denoised_waveform
 
-    def _get_waveform(fn, new_sr):
+    def _get_waveform(self, fn, new_sr):
         waveform, sr = torchaudio.load(fn)
     
         if sr != new_sr:
@@ -48,7 +48,7 @@ class AudioDenoiser:
 
         return chunks, padded_extra
     
-    def _pad(data, size):
+    def _pad(self, data, size):
         assert data.size(dim=1) <= size
         if data.size(dim=1) == size:
             return data
