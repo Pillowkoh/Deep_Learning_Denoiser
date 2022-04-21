@@ -1,3 +1,4 @@
+from locale import normalize
 import torchaudio
 import torch
 import torch.nn.functional as F
@@ -29,6 +30,8 @@ class AudioDenoiser:
         self.waveform = self._get_waveform(filename, sr)
         self.chunks, self.padding = self._split_chunks(self.waveform, 22050)
 
+        self.max_val = 1
+
         # TO DO: load model here
         self.model = Denoiser()
         self.model.load_state_dict(torch.load(weight_path, map_location=DEVICE))
@@ -50,11 +53,14 @@ class AudioDenoiser:
         denoised_waveform = denoised_waveform[..., :-self.padding]
         print("DENOISED:", denoised_waveform.shape)
         
-        return denoised_waveform
+        return torch.mul(denoised_waveform, 100)
 
     def _get_waveform(self, fn, new_sr):
-        waveform, sr = torchaudio.load(fn)
+        waveform, sr = torchaudio.load(fn, normalize=False)
         print("INPUT SHAPE:", waveform.shape)
+
+        self.max_val = torch.max(waveform)
+        print("MAX VAL:", self.max_val)
 
         if sr != new_sr:
             resampler = torchaudio.transforms.Resample(sr, new_sr)

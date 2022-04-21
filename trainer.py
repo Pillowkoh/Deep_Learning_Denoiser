@@ -22,7 +22,7 @@ class Trainer(object):
         self.optimizer = optimizer
         self.epochs = epochs
         self.scheduler = scheduler
-        self.checkpoint_frequency = 10
+        self.checkpoint_frequency = 5
         self.early_stopping_epochs = 10
         self.early_stopping_avg = 10
         self.early_stopping_precision = 5
