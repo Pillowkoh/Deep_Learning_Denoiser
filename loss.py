@@ -14,8 +14,8 @@ class DenoiserLoss(torch.nn.Module):
 
     def forward(self, clean, denoised):
         l1_loss = F.l1_loss(clean, denoised)
-        multi_resolution_stft_loss = MutltiResolutionSTFTLoss(sc_factor=0.3, mag_factor=0.3)
-        sc_loss, mag_loss = multi_resolution_stft_loss(clean, denoised)
+        multi_resolution_stft_loss = MutltiResolutionSTFTLoss(sc_factor=0.1, mag_factor=0.1)
+        sc_loss, mag_loss = multi_resolution_stft_loss(clean.squeeze(1), denoised.squeeze(1))
 
         loss = l1_loss + sc_loss + mag_loss
         return loss
