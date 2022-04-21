@@ -15,6 +15,7 @@ Run all cells in Train.ipynb
 * **static**: styling for GUI
 * **templates**: HTML which defines structure for GUI
 * **trained_weights**: saved weights which can be loaded to a denoiser model
+* **data (NOT IN REPOSITORY)**: folder to hold all relevant data for training of denoiser model
 * app.py: Flask server
 * denoiser_app.py: Wrapper class for denoiser model which interfaces with the Flask server
 * Train.ipynb: jupyter notebook for training of denoiser model
