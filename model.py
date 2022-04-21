@@ -4,20 +4,20 @@ from torch import nn
 from torch.nn import functional as F
 
 # TESTING FACBOOK DENOISER MAY NID REMOVE
-class BLSTM(nn.Module):
-    def __init__(self, dim, layers=2, bi=True):
-        super().__init__()
-        klass = nn.LSTM
-        self.lstm = klass(bidirectional=bi, num_layers=layers, hidden_size=dim, input_size=dim)
-        self.linear = None
-        if bi:
-            self.linear = nn.Linear(2 * dim, dim)
+# class BLSTM(nn.Module):
+#     def __init__(self, dim, layers=2, bi=True):
+#         super().__init__()
+#         klass = nn.LSTM
+#         self.lstm = klass(bidirectional=bi, num_layers=layers, hidden_size=dim, input_size=dim)
+#         self.linear = None
+#         if bi:
+#             self.linear = nn.Linear(2 * dim, dim)
 
-    def forward(self, x, hidden=None):
-        x, hidden = self.lstm(x, hidden)
-        if self.linear:
-            x = self.linear(x)
-        return x, hidden
+#     def forward(self, x, hidden=None):
+#         x, hidden = self.lstm(x, hidden)
+#         if self.linear:
+#             x = self.linear(x)
+#         return x, hidden
 
 class Denoiser(torch.nn.Module):
     """
@@ -88,16 +88,17 @@ class Denoiser(torch.nn.Module):
             chin = hidden
             hidden = min(int(growth * hidden), max_hidden)
 
+        for i in range(N_attention):
+            attention = []
+            attention += [
+                nn.MultiheadAttention(embed_dim=chin, num_heads=8),
+                nn.Linear(chin, 2*chin),
+                nn.Linear(2*chin, chin)
+            ]
+            self.attention.append(nn.Sequential(*attention))
+
         #TRY TRY ONLY
-        # for i in range(N_attention):
-        #     attention = []
-        #     attention += [
-        #         nn.MultiheadAttention(embed_dim=chin, num_heads=8),
-        #         nn.Linear(chin, 2*chin),
-        #         nn.Linear(2*chin, chin)
-        #     ]
-        #     self.attention.append(nn.Sequential(*attention))
-        self.attention.append(BLSTM(chin, bi=False))
+        # self.attention.append(BLSTM(chin, bi=False))
 
     def forward(self, input):
         x = input
@@ -111,14 +112,14 @@ class Denoiser(torch.nn.Module):
 
         x = x.permute(2, 0, 1)
 
-        # for attention in self.attention:
-        #     x, _ = attention[0](x, x, x)
-        #     x = attention[1](x)
-        #     x = attention[2](x)
+        for attention in self.attention:
+            x, _ = attention[0](x, x, x)
+            x = attention[1](x)
+            x = attention[2](x)
         
         # TRY TRY ONLY
-        for attention in self.attention:
-            x = attention(x)
+        # for attention in self.attention:
+        #     x = attention(x)
 
         x = x.permute(1, 2, 0)
 
