@@ -3,7 +3,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-# TESTING FACBOOK DENOISER MAY NID REMOVE
+# LSTM (replace Attention) - for testing
 # class BLSTM(nn.Module):
 #     def __init__(self, dim, layers=2, bi=True):
 #         super().__init__()
@@ -97,7 +97,7 @@ class Denoiser(torch.nn.Module):
             ]
             self.attention.append(nn.Sequential(*attention))
 
-        #TRY TRY ONLY
+        # LSTM (replace Attention) - for testing
         # self.attention.append(BLSTM(chin, bi=False))
 
     def forward(self, input):
@@ -117,9 +117,9 @@ class Denoiser(torch.nn.Module):
             x = attention[1](x)
             x = attention[2](x)
         
-        # TRY TRY ONLY
+        # LSTM (replace Attention) - for testing
         # for attention in self.attention:
-        #     x = attention(x)
+        #     x, _ = attention(x)
 
         x = x.permute(1, 2, 0)
 
