@@ -7,7 +7,7 @@ Implementation of a denoiser that takes in a noisy audio file and returns a .wav
 To load tensors of waveforms from the clean and noisy audio .wav files, in notebooks/Audio_conversion.ipynb, run the notebook cells from header 'Converting WAV to Tensors' onwards.
 
 ## Training the model
-Run Train.ipynb
+Run all cells in Train.ipynb
 
 ## Directory structure
 * **Utils**: utility files, including helper functions and dataset.py, which implements a helper class that generates noisy audio files by adding noise samples to clean audio files
