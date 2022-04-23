@@ -7,7 +7,8 @@ from scipy.io import wavfile
 from model import Denoiser
 
 if os.name == 'nt':
-    BEST_WEIGHT_PATH = '.\\trained_weights\\model_030.pt'
+    # BEST_WEIGHT_PATH = '.\\trained_weights\\model_030'
+    BEST_WEIGHT_PATH = '.\\trained_weights\/515_attention_full_run1\model_005'
 
 elif os.name == 'posix':
     BEST_WEIGHT_PATH = 'trained_weights/model_030'
@@ -33,12 +34,12 @@ class AudioDenoiser:
         self.max_val = 1
 
         # TO DO: load model here
-        self.model = Denoiser()
+        self.model = Denoiser(depth=5, N_attention=1)
         self.model.load_state_dict(torch.load(weight_path, map_location=DEVICE))
     
 
     def denoise(self, out_fp):
-        denoised_waveform = self._denoise_waveform() 
+        denoised_waveform = self._denoise_waveform().detach() 
         torchaudio.save(out_fp, denoised_waveform, self.sr)
 
     def _denoise_waveform(self):
