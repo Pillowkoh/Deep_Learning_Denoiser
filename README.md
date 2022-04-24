@@ -4,10 +4,12 @@
 Implementation of a denoiser that takes in a noisy audio file and returns a .wav file of the denoised audio. Noise refers to background urban noises such as idling engines or air conditioner humming. The model follows a encoder-decoder architecture with 1D convolutional layers, along with multi-headed attention layers as the bottleneck module between encoder and decoder.
 
 ## Preparing Datset
+Read `./data/INSTRUCTIONS.txt` for steps to download datasets
+
 To load tensors of waveforms from the clean and noisy audio .wav files, in notebooks/Audio_conversion.ipynb, run the notebook cells from header 'Converting WAV to Tensors' onwards.
 
 ## Training the model
-Run all cells in Train.ipynb
+Run all cells in Train.ipynb.
 
 ## Directory structure
 * **Utils**: utility files, including helper functions and dataset.py, which implements a helper class that generates noisy audio files by adding noise samples to clean audio files
