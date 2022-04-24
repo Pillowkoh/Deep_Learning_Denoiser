@@ -17,15 +17,15 @@ class Audio_Dataset(Dataset):
     def __init__(self, config, set_type="train"):
         super(Audio_Dataset, self).__init__() 
         self.device = config["device"]
-        self.clean_dir = os.path.join(config["data_dir"], "clean_audio_tensors_v2")
-        self.noisy_dir = os.path.join(config["data_dir"], "noisy_audio_tensors_v2")
+        self.clean_dir = os.path.join(config["data_dir"], "clean_trainset_56spk_tensors")
+        self.noisy_dir = os.path.join(config["data_dir"], "noisy_trainset_56spk_tensors")
 
         self.clean_names = np.sort(os.listdir(self.clean_dir))
         self.noisy_names = np.sort(os.listdir(self.noisy_dir))
 
         self.train_end = int(config["train"] * len(os.listdir(self.clean_dir)))
-        self.val_end = int((config["train"]+config["val"]) * len(os.listdir(self.clean_dir)))
-        self.test_end = len(os.listdir(self.clean_dir))
+        self.val_end = int((config["train"] + config["val"]) * len(os.listdir(self.clean_dir)))
+        # self.test_end = len(os.listdir(self.clean_dir))
 
         if set_type=="train":
             n_start = 0
@@ -35,9 +35,9 @@ class Audio_Dataset(Dataset):
             n_start = self.train_end
             n_end = self.val_end
 
-        else:
-            n_start = self.val_end
-            n_end = self.test_end
+        # else:
+        #     n_start = self.val_end
+        #     n_end = self.test_end
 
         self.clean_names = self.clean_names[n_start:n_end]
         self.noisy_names = self.noisy_names[n_start:n_end]
@@ -54,10 +54,10 @@ class Audio_Dataset(Dataset):
         clean_tensor_file = os.path.join(self.clean_dir, clean_name)
         noisy_tensor_file = os.path.join(self.noisy_dir, noisy_name)
 
-        audio_input = torch.load(noisy_tensor_file, map_location=self.device)
         ground_truth = torch.load(clean_tensor_file, map_location=self.device)
+        audio_input = torch.load(noisy_tensor_file, map_location=self.device)
 
         return {
-            "noisy":audio_input,
             "clean":ground_truth,
+            "noisy":audio_input,
         }

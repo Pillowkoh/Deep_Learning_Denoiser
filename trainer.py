@@ -81,7 +81,6 @@ class Trainer(object):
 
     def _epoch_train(self, dataloader):
         self.model.train()
-        running_loss = []
 
         for i, data in enumerate(tqdm(dataloader), 0):
             # print(f"batch #{i} --- training")
@@ -94,13 +93,13 @@ class Trainer(object):
 
             batch_loss = []
 
-            loss = None
+            loss = 0
 
             for j in range(self.batch_size):
-                if loss == None:
-                    loss = self.loss_fn(clean[j], denoised[j])
-                else:
-                    loss += self.loss_fn(clean[j], denoised[j])
+                # if loss == None:
+                #     loss = self.loss_fn(clean[j], denoised[j])
+                # else:
+                loss += self.loss_fn(clean[j], denoised[j])
                 # batch_loss.append(loss.item())
                 # batch_loss.append(loss)
                 # print(loss)
@@ -110,11 +109,12 @@ class Trainer(object):
 
             # avg_loss.backward()                            
             loss/=self.batch_size
-            loss.backward()                            
-            self.optimizer.step()
 
             # running_loss.append(avg_loss)
             running_loss.append(loss.item())
+
+            loss.backward()                            
+            self.optimizer.step()
 
             if i == self.batches_per_epoch:
                 epoch_loss = np.mean(running_loss)
@@ -133,12 +133,13 @@ class Trainer(object):
 
                 denoised = self.model(inputs)
                 batch_loss = []
-                loss = None
+                loss = 0
                 for j in range(self.batch_size):
-                    if loss == None:
-                        loss = self.loss_fn(clean[j], denoised[j])
-                    else:
-                        loss += self.loss_fn(clean[j], denoised[j])
+                    # if loss == None:
+                    #     loss = self.loss_fn(clean[j], denoised[j])
+                    # else:
+                    loss += self.loss_fn(clean[j], denoised[j])
+
                     # batch_loss.append(loss.item())
                     # batch_loss.append(loss)
                 # running_loss.append(torch.mean(batch_loss))

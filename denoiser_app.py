@@ -7,8 +7,7 @@ from scipy.io import wavfile
 from model import Denoiser
 
 if os.name == 'nt':
-    # BEST_WEIGHT_PATH = '.\\trained_weights\\model_030'
-    BEST_WEIGHT_PATH = '.\\trained_weights\/515_attention_full_run1\model_005'
+    BEST_WEIGHT_PATH = 'model_final'
 
 elif os.name == 'posix':
     BEST_WEIGHT_PATH = 'trained_weights/model_030'
@@ -24,12 +23,12 @@ class AudioDenoiser:
             - sr (int): sample rate of denoied file
             - weight_path (str): path of weights to be used for denoiser model
     """
-    def __init__(self, filename, sr=22050, weight_path = BEST_WEIGHT_PATH):
+    def __init__(self, filename, sr=48_000, weight_path = BEST_WEIGHT_PATH):
         self.fn = filename
         self.sr = sr
 
         self.waveform = self._get_waveform(filename, sr)
-        self.chunks, self.padding = self._split_chunks(self.waveform, 22050)
+        # self.chunks, self.padding = self._split_chunks(self.waveform, 22050)
 
         self.max_val = 1
 
@@ -39,25 +38,29 @@ class AudioDenoiser:
     
 
     def denoise(self, out_fp):
-        denoised_waveform = self._denoise_waveform().detach() 
+        denoised_waveform = self._denoise_waveform().detach()
         torchaudio.save(out_fp, denoised_waveform, self.sr)
 
     def _denoise_waveform(self):
         denoised_chunks = []
-        for chunk in self.chunks:
-            chunk = torch.unsqueeze(chunk, 0)
-            denoised_chunk = self.model(chunk)
-            denoised_chunk = torch.squeeze(denoised_chunk, 0)
-            denoised_chunks.append(denoised_chunk)
+        # for chunk in self.chunks:
+        #     chunk = torch.unsqueeze(chunk, 0)
+        #     denoised_chunk = self.model(chunk)
+        #     denoised_chunk = torch.squeeze(denoised_chunk, 0)
+        #     denoised_chunks.append(denoised_chunk)
         
-        denoised_waveform = torch.cat(denoised_chunks, dim=1)
-        denoised_waveform = denoised_waveform[..., :-self.padding]
-        print("DENOISED:", denoised_waveform.shape)
+        # denoised_waveform = torch.cat(denoised_chunks, dim=1)
+        # denoised_waveform = denoised_waveform[..., :-self.padding]
+        # print("DENOISED:", denoised_waveform.shape)
+        print(self.waveform.dtype)
+        denoised_waveform = self.model(self.waveform.unsqueeze(0)).squeeze(0)
+        print(torch.max(denoised_waveform))
         
-        return torch.mul(denoised_waveform, 100)
+        # return torch.mul(denoised_waveform, 10)
+        return denoised_waveform
 
     def _get_waveform(self, fn, new_sr):
-        waveform, sr = torchaudio.load(fn, normalize=False)
+        waveform, sr = torchaudio.load(fn, normalize=True)
         print("INPUT SHAPE:", waveform.shape)
 
         self.max_val = torch.max(waveform)

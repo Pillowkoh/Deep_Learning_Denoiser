@@ -52,7 +52,7 @@ class Denoiser(torch.nn.Module):
         growth=2,
         max_hidden=10_000,
         glu=True,
-        sample_rate=22_050
+        sample_rate=48_000
     ):
         super(Denoiser, self).__init__()
         self.depth = depth
@@ -88,6 +88,7 @@ class Denoiser(torch.nn.Module):
             chin = hidden
             hidden = min(int(growth * hidden), max_hidden)
 
+        #TRY TRY ONLY
         for i in range(N_attention):
             attention = []
             attention += [
@@ -96,8 +97,6 @@ class Denoiser(torch.nn.Module):
                 nn.Linear(2*chin, chin)
             ]
             self.attention.append(nn.Sequential(*attention))
-
-        # LSTM (replace Attention) - for testing
         # self.attention.append(BLSTM(chin, bi=False))
 
     def forward(self, input):
@@ -117,9 +116,9 @@ class Denoiser(torch.nn.Module):
             x = attention[1](x)
             x = attention[2](x)
         
-        # LSTM (replace Attention) - for testing
+        # # TRY TRY ONLY
         # for attention in self.attention:
-        #     x, _ = attention(x)
+        #     x = attention(x)
 
         x = x.permute(1, 2, 0)
 

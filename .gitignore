@@ -12,6 +12,8 @@ data/clean_audio_tensors/*.pt
 data/noisy_audio_tensors/*.pt
 data/silent_audio
 .venv
-inputs
-outputs
+
+# Input/Output files for GUI
+inputs/*
+outputs/*
 venv
