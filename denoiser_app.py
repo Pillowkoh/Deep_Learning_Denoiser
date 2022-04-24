@@ -10,7 +10,7 @@ if os.name == 'nt':
     BEST_WEIGHT_PATH = 'model_final'
 
 elif os.name == 'posix':
-    BEST_WEIGHT_PATH = 'trained_weights/model_030'
+    BEST_WEIGHT_PATH = 'model_final'
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -54,7 +54,7 @@ class AudioDenoiser:
         return resampled_waveform
 
     ### Deprecated. Do not use. ###
-    
+
     # def _split_chunks(self, waveform, chunk_size=22050):
     #     chunks = list(torch.split(waveform, chunk_size, dim=1))
     #     chunks[-1], padded_extra = self._pad(chunks[-1], 22050)
