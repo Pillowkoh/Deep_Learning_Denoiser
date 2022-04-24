@@ -91,26 +91,13 @@ class Trainer(object):
             running_loss = []
             denoised = self.model(inputs)
 
-            batch_loss = []
-
             loss = 0
 
             for j in range(self.batch_size):
-                # if loss == None:
-                #     loss = self.loss_fn(clean[j], denoised[j])
-                # else:
                 loss += self.loss_fn(clean[j], denoised[j])
-                # batch_loss.append(loss.item())
-                # batch_loss.append(loss)
-                # print(loss)
-
-            # avg_loss = torch.mean(torch.FloatTensor(batch_loss))
-            # avg_loss = torch.autograd.Variable(avg_loss, requires_grad = True)
-
-            # avg_loss.backward()                            
+                          
             loss/=self.batch_size
 
-            # running_loss.append(avg_loss)
             running_loss.append(loss.item())
 
             loss.backward()                            
@@ -119,7 +106,7 @@ class Trainer(object):
             if i == self.batches_per_epoch:
                 epoch_loss = np.mean(running_loss)
                 self.loss["train"].append(epoch_loss)
-                # break
+
         print('Training epoch complete')
 
     def _epoch_eval(self, dataloader):
@@ -132,22 +119,16 @@ class Trainer(object):
                 clean = data["clean"].to(self.device)
 
                 denoised = self.model(inputs)
-                batch_loss = []
+
                 loss = 0
                 for j in range(self.batch_size):
-                    # if loss == None:
-                    #     loss = self.loss_fn(clean[j], denoised[j])
-                    # else:
                     loss += self.loss_fn(clean[j], denoised[j])
 
-                    # batch_loss.append(loss.item())
-                    # batch_loss.append(loss)
-                # running_loss.append(torch.mean(batch_loss))
                 loss/=self.batch_size
                 running_loss.append(loss.item())
 
                 if i == self.batches_per_epoch_val:
                     epoch_loss = np.mean(running_loss)
                     self.loss["val"].append(epoch_loss)
-                    # break
+
         print('Eval epoch complete')

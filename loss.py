@@ -12,6 +12,7 @@ class DenoiserLoss(torch.nn.Module):
     def __init__(self):
         super(DenoiserLoss, self).__init__()
 
+
     def forward(self, clean, denoised):
         l1_loss = F.l1_loss(clean, denoised)
         multi_resolution_stft_loss = MutltiResolutionSTFTLoss(sc_factor=0.1, mag_factor=0.1)
@@ -61,6 +62,7 @@ class STFTLoss(torch.nn.Module):
         self.sc_factor = sc_factor
         self.mag_factor = mag_factor
     
+
     def forward(self, clean, denoised):
         stft_clean = self._stft(clean)
         stft_denoised = self._stft(denoised)
@@ -69,7 +71,7 @@ class STFTLoss(torch.nn.Module):
 
         return sc_loss, mag_loss
 
-    # def _stft(self, x, window="hann_window"):
+
     def _stft(self, x):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         window = torch.hann_window(self.win_length).to(device)
@@ -79,11 +81,13 @@ class STFTLoss(torch.nn.Module):
 
         return torch.sqrt(torch.clamp(real ** 2 + imag ** 2, min=1e-7)).transpose(2,1)
     
+
     def _spectral_conversion_loss(self, stft_clean, stft_denoised):
         num = torch.norm(stft_clean - stft_denoised)
         denom = torch.norm(stft_clean)
 
         return num / denom
     
+
     def _magnitude_loss(self, stft_clean, stft_denoised):
         return F.l1_loss(torch.log(stft_clean), torch.log(stft_denoised))

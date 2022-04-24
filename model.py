@@ -88,7 +88,6 @@ class Denoiser(torch.nn.Module):
             chin = hidden
             hidden = min(int(growth * hidden), max_hidden)
 
-        #TRY TRY ONLY
         for i in range(N_attention):
             attention = []
             attention += [
@@ -97,6 +96,8 @@ class Denoiser(torch.nn.Module):
                 nn.Linear(2*chin, chin)
             ]
             self.attention.append(nn.Sequential(*attention))
+
+        ### TESTING LSTM ###    
         # self.attention.append(BLSTM(chin, bi=False))
 
     def forward(self, input):
@@ -116,7 +117,7 @@ class Denoiser(torch.nn.Module):
             x = attention[1](x)
             x = attention[2](x)
         
-        # # TRY TRY ONLY
+        ### TESTING LSTM ###
         # for attention in self.attention:
         #     x = attention(x)
 
@@ -133,18 +134,14 @@ class Denoiser(torch.nn.Module):
 
     def valid_length(self, length):
         """
-        Return the nearest valid length to use with the model so that
-        there is no time steps left over in a convolutions, e.g. for all
-        layers, size of the input - kernel_size % stride = 0.
-        If the mixture has a valid length, the estimated sources
-        will have exactly the same length.
+        Return nearest valid length to use with the model so that
+        there is no time steps left over in a convolutions
         """
-        # length = math.ceil(length * self.resample)
 
         for idx in range(self.depth):
             length = math.ceil((length - self.kernel_size) / self.stride) + 1
             length = max(length, 1)
         for idx in range(self.depth):
             length = (length - 1) * self.stride + self.kernel_size
-        # length = int(math.ceil(length / self.resample))
+
         return int(length)

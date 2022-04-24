@@ -25,6 +25,8 @@ class Audio_Dataset(Dataset):
 
         self.train_end = int(config["train"] * len(os.listdir(self.clean_dir)))
         self.val_end = int((config["train"] + config["val"]) * len(os.listdir(self.clean_dir)))
+
+        ### For test set of Common_Voice ###
         # self.test_end = len(os.listdir(self.clean_dir))
 
         if set_type=="train":
@@ -35,6 +37,7 @@ class Audio_Dataset(Dataset):
             n_start = self.train_end
             n_end = self.val_end
 
+        ### For test set of Common_Voice ###
         # else:
         #     n_start = self.val_end
         #     n_end = self.test_end
