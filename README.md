@@ -23,3 +23,27 @@ Run all cells in Train.ipynb
 * loss.py: loss function for training
 * model.py: denoiser model architecture class
 * trainer.py: trainer class for denoiser model
+
+## Running the application
+It is recommended that you carry out these steps in Visual Studio Code. In the command line terminal, ensure that you are in the Deep_Learning_Denoiser folder. Then, execute the following steps:
+
+1. Create a virtual environment
+* macOS: python3 -m venv venv
+* Windows: py -3 -m venv venv
+
+2. Activate the virtual environment
+* macOS: . venv/bin/activate
+* Windows: venv\Scripts\activate
+
+3. Install Flask in the virtual environment
+pip install Flask
+
+4. Set the Flask app to be app.py 
+set FLASK_APP=app.py
+  
+5. Run the app
+python -m flask run  
+
+6. Follow the link generated in your terminal (to your localhost) to load the application
+
+Following the instructions on the web application should allow you to upload an audio file to denoise and subsequently download the denoised file.
