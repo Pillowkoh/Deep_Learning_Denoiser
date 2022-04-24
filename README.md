@@ -12,39 +12,64 @@ To load tensors of waveforms from the clean and noisy audio .wav files, in noteb
 Run all cells in Train.ipynb.
 
 ## Directory structure
-* **Utils**: utility files, including helper functions and dataset.py, which implements a helper class that generates noisy audio files by adding noise samples to clean audio files
-* **notebooks**: jupyter notebooks for various purposes
-* **static**: styling for GUI
-* **templates**: HTML which defines structure for GUI
-* **trained_weights**: saved weights which can be loaded to a denoiser model
-* **data (NOT IN REPOSITORY)**: folder to hold all relevant data for training of denoiser model
-* app.py: Flask server
-* denoiser_app.py: Wrapper class for denoiser model which interfaces with the Flask server
-* Train.ipynb: jupyter notebook for training of denoiser model
-* audio_dataset.py: dataloader for training
-* loss.py: loss function for training
-* model.py: denoiser model architecture class
-* trainer.py: trainer class for denoiser model
+* **Utils**:  
+utility files, including helper functions and dataset.py, which implements a helper class that generates noisy audio files by adding noise samples to clean audio files
+
+* **notebooks**:  
+jupyter notebooks for various purposes
+
+* **static**:  
+styling for GUI
+
+* **templates**:  
+HTML which defines structure for GUI
+
+* **trained_weights**:  
+saved weights which can be loaded to a denoiser model
+
+* **data (NOT IN REPOSITORY)**:  
+folder to hold all relevant data for training of denoiser model
+
+* app.py:  
+Flask server
+
+* denoiser_app.py:  
+Wrapper class for denoiser model which interfaces with the Flask server
+
+* Train.ipynb:  
+jupyter notebook for training of denoiser model
+
+* audio_dataset.py:  
+dataloader for training
+
+* loss.py:  
+loss function for training
+
+* model.py:  
+denoiser model architecture class
+
+* trainer.py:  
+trainer class for denoiser model
 
 ## Running the application
 It is recommended that you carry out these steps in Visual Studio Code. In the command line terminal, ensure that you are in the Deep_Learning_Denoiser folder. Then, execute the following steps:
 
 1. Create a virtual environment
-* macOS: python3 -m venv venv
-* Windows: py -3 -m venv venv
+* POSIX: `python3 -m venv venv`
+* Windows: `py -3 -m venv venv`
 
 2. Activate the virtual environment
-* macOS: . venv/bin/activate
-* Windows: venv\Scripts\activate
+* POSIX: `. venv/bin/activate`
+* Windows: `venv\Scripts\activate`
 
-3. Install Flask in the virtual environment
-pip install Flask
+3. Install Flask in the virtual environment  
+`pip install Flask`
 
-4. Set the Flask app to be app.py 
-set FLASK_APP=app.py
+4. Set the Flask app to be app.py  
+`set FLASK_APP=app.py`
   
-5. Run the app
-python -m flask run  
+5. Run the app  
+`python -m flask run`
 
 6. Follow the link generated in your terminal (to your localhost) to load the application
 
