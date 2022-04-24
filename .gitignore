@@ -2,18 +2,19 @@
 .DS_Store
 __pycache__
 
+
 # Ignore data files
-data
-data/clean_audio/
-data/noisy_audio/
-data/clean_audio_WAV/*.wav
-data/noisy_audio_WAV/*.wav
-data/clean_audio_tensors/*.pt
-data/noisy_audio_tensors/*.pt
-data/silent_audio
-.venv
+data/*
+!data/INSTRUCTIONS.txt
+
 
 # Input/Output files for GUI
 inputs/*
 outputs/*
+!inputs/.gitkeep
+!outputs/.gitkeep
+
+
+# Virtual environments
+.venv
 venv

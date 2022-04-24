@@ -1,0 +1,14 @@
+### FOLLOW THESE INSTRUCTIONS TO DOWNLOAD DATASETS ###
+
+Link to download datasets:
+https://sutdapac-my.sharepoint.com/:f:/g/personal/arnold_lim_mymail_sutd_edu_sg/EtWaUhe1vHdPk1AJBy9asWYBC2XhaK5yaTT37tRa_LQFAg?e=B8Qjjp
+
+Mozilla + UrbanSound8K:
+1. clean_audio_WAV.zip
+2. noisy_audio_WAV.zip
+
+Valentini:
+1. clean_testset_wav.zip
+2. noisy_testset_wav.zip
+3. clean_trainset_56spk_wav.zip
+4. noisy_trainset_56spk_wav.zip
