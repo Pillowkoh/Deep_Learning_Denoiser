@@ -62,8 +62,8 @@ It is recommended that you carry out these steps in Visual Studio Code. In the c
 * POSIX: `. venv/bin/activate`
 * Windows: `venv\Scripts\activate`
 
-3. Install Flask in the virtual environment  
-`pip install Flask`
+3. Install dependencies in the virtual environment  
+`pip install -r requirements.txt`
 
 4. Set the Flask app to be app.py  
 `set FLASK_APP=app.py`
